@@ -7745,7 +7745,7 @@ class assign {
                                                 LEFT JOIN {assign_submission} s
                                                     ON u.id = s.userid and s.assignment = :assignid1 AND
                                                     s.latest = 1
-                                                JOIN {assign_grades} g
+                                                LEFT JOIN {assign_grades} g
                                                     ON u.id = g.userid and g.assignment = :assignid2 AND
                                                     g.attemptnumber = s.attemptnumber' .
                                                 $where, $params);
@@ -7753,16 +7753,15 @@ class assign {
         foreach ($graderesults as $result) {
             $gradingstatus = $this->get_grading_status($result->userid);
             if (!$this->get_instance()->markingworkflow || $gradingstatus == ASSIGN_MARKING_WORKFLOW_STATE_RELEASED) {
-                $gradebookgrade = clone $result;
+                $grade = $this->get_user_grade($result->userid, false);
+                if (!$grade) continue;
+                $gradebookgrade = $this->convert_grade_for_gradebook($grade);
                 // Now get the feedback.
                 if ($gradebookplugin) {
-                    $grade = $this->get_user_grade($result->userid, false);
-                    if ($grade) {
-                        $gradebookgrade->feedback = $gradebookplugin->text_for_gradebook($grade);
-                        $gradebookgrade->feedbackformat = $gradebookplugin->format_for_gradebook($grade);
-                    }
+                    $gradebookgrade['feedback'] = $gradebookplugin->text_for_gradebook($grade);
+                    $gradebookgrade['feedbackformat'] = $gradebookplugin->format_for_gradebook($grade);
                 }
-                $grades[$gradebookgrade->userid] = $gradebookgrade;
+                $grades[$gradebookgrade['userid']] = $gradebookgrade;
             }
         }
 

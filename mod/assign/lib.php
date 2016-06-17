@@ -1157,8 +1157,8 @@ function assign_update_grades($assign, $userid=0, $nullifnone=true) {
 
     } else if ($grades = assign_get_user_grades($assign, $userid)) {
         foreach ($grades as $k => $v) {
-            if ($v->rawgrade == -1) {
-                $grades[$k]->rawgrade = null;
+            if ($v['rawgrade'] == -1) {
+                $grades[$k]['rawgrade'] = null;
             }
         }
         assign_grade_item_update($assign, $grades);
