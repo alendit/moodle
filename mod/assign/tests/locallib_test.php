@@ -1786,7 +1786,7 @@ class mod_assign_locallib_testcase extends mod_assign_base_testcase {
 
         // Check the grade exists.
         $grades = $assign->get_user_grades_for_gradebook($this->students[0]->id);
-        $this->assertEquals(60, (int)$grades[$this->students[0]->id]->rawgrade);
+        $this->assertEquals(60, (int)$grades[$this->students[0]->id]['rawgrade']);
 
         // Check we can reopen still.
         $result = $assign->testable_process_add_attempt($this->students[0]->id);
@@ -2064,7 +2064,7 @@ class mod_assign_locallib_testcase extends mod_assign_base_testcase {
 
         // Make sure the grade is pushed to the gradebook.
         $grades = $assign->get_user_grades_for_gradebook($this->students[0]->id);
-        $this->assertEquals(50, (int)$grades[$this->students[0]->id]->rawgrade);
+        $this->assertEquals(50, (int)$grades[$this->students[0]->id]['rawgrade']);
     }
 
     public function test_markerallocation() {
