@@ -95,3 +95,12 @@
     margin-left: 0px;
     margin-right: 10px;
 }
+.range_date_sel, .exact_date_sel {
+  display: none;
+}
+input.range_select_checkbox[type="checkbox"]:checked ~ .range_date_sel {
+  display: block;
+}
+input.range_select_checkbox[type="checkbox"]:not(:checked) ~ .exact_date_sel {
+  display: block;
+}
