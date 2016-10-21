@@ -6,7 +6,7 @@ Feature: In an assignment, techer can submit grades and release them using workf
   
 
   @javascript @_file_upload
-  Scenario: Submit a text online and edit the submission
+  Scenario: Submit a text online and release the submission
     Given the following "courses" exist:
       | fullname | shortname | category | groupmode |
       | Course 1 | C1 | 0 | 1 |
@@ -53,7 +53,10 @@ Feature: In an assignment, techer can submit grades and release them using workf
     And I set the field "id_markingworkflowstate" to "Released"
     And I press "Save changes"
     # Check the grad
+    And I should see "Default group" in the "Student 1" "table_row"
+    And I should see "Default group" in the "Student 1" "table_row"
     And I set the field "Grading action" to "View gradebook"
     And I should see "50.00" in the "Student 1" "table_row"
+    And I should see "50.00" in the "Student 2" "table_row"
     And I log out
 

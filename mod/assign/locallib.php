@@ -1475,7 +1475,7 @@ class assign {
                                 ON u.id = s.userid
                                AND s.assignment = :assignmentid1
                                AND s.latest = 1
-                         LEFT JOIN {assign_grades} g
+                         JOIN {assign_grades} g
                                 ON u.id = g.userid
                                AND g.assignment = :assignmentid2
                                AND g.attemptnumber = s.attemptnumber
