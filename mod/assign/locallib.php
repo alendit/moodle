@@ -7743,12 +7743,13 @@ class assign {
                                                     g.grader as usermodified
                                                 FROM {user} u
                                                 LEFT JOIN {assign_submission} s
-                                                    ON u.id = s.userid and s.assignment = :assignid1 AND
+                                                    ON assignment = :assignid1 AND
                                                     s.latest = 1
-                                                LEFT JOIN {assign_grades} g
-                                                    ON u.id = g.userid and g.assignment = :assignid2 AND
+                                                JOIN {assign_grades} g
+                                                    ON g.assignment = :assignid2 AND
                                                     g.attemptnumber = s.attemptnumber' .
-                                                $where, $params);
+                                                $where .
+                                               'AND (u.id = s.userid OR u.id = g.userid)', $params);
 
         foreach ($graderesults as $result) {
             $gradingstatus = $this->get_grading_status($result->userid);
