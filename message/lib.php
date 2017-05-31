@@ -719,6 +719,23 @@ function message_post_message($userfrom, $userto, $message, $format) {
 
     $eventdata->timecreated     = time();
     $eventdata->notification    = 0;
+    $usertocontext = context_user::instance($userto->id);
+    // can't rely on the get_extra_user_fields because it doesn't support checking the capability for another user
+    // Only users with permission get the extra fields.
+    if (empty($CFG->showuseridentity) || !has_capability('moodle/site:viewuseridentity', $usertocontext, $userto)) {
+        $showuseridentityfields = array();
+    } else {
+        // Split showuseridentity on comma.
+        $showuseridentityfields =  explode(',', $CFG->showuseridentity);
+    }
+    if (is_siteadmin($userto->id) // The admin is allowed the users email.
+            or $userto->id === $userfrom->id // Of course the current user is as well.
+            or in_array('email', $showuseridentityfields)
+            or $userfrom->maildisplay == 1
+            or ($userfrom->maildisplay == 2 and enrol_sharing_course($userfrom, $userto))) {
+        $eventdata->replyto = $userfrom->email;
+        $eventdata->replytoname = fullname($userfrom);
+    }
     return message_send($eventdata);
 }
 
